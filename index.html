@@ -1,1 +1,421 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Style Shopper</title><style>:root{color-scheme:light dark;--bg:#f6f7f9;--card:#fff;--text:#111827;--muted:#6b7280;--line:#d1d5db;--accent:#2563eb;--danger:#b91c1c;--ok:#047857}@media(prefers-color-scheme:dark){:root{--bg:#0f172a;--card:#111827;--text:#e5e7eb;--muted:#9ca3af;--line:#374151;--accent:#60a5fa;--danger:#f87171;--ok:#34d399}}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.45}.wrap{width:min(1120px,calc(100% - 2rem));margin:auto}header{padding:2rem 0;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(37,99,235,.16),rgba(14,165,233,.05))}h1{font-size:clamp(2rem,4vw,3.2rem);margin:0 0 .5rem}.lede{color:var(--muted);max-width:75ch}.bar{position:sticky;top:0;z-index:3;background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}.bar .wrap{display:flex;justify-content:space-between;gap:.75rem;align-items:center;flex-wrap:wrap;padding:.75rem 0}.buttons{display:flex;gap:.5rem;flex-wrap:wrap}button,.fileBtn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:.6rem;padding:.65rem .85rem;font-weight:700;cursor:pointer}.primary{background:var(--accent);border-color:var(--accent);color:white}.danger{color:var(--danger)}main{padding:1rem 0 3rem}section,details{background:var(--card);border:1px solid var(--line);border-radius:1rem;padding:1rem;margin:0 0 1rem;box-shadow:0 8px 24px #0001}summary{cursor:pointer;font-weight:800;font-size:1.1rem;margin:-.25rem -.25rem .7rem;padding:.25rem}h2{margin:.1rem 0 .8rem;font-size:1.25rem}.grid{display:grid;grid-template-columns:1fr;gap:.75rem}@media(min-width:800px){.two{grid-template-columns:repeat(2,1fr)}.three{grid-template-columns:repeat(3,1fr)}.four{grid-template-columns:repeat(4,1fr)}}label{display:block;font-weight:700;margin:.35rem 0}.hint,.muted,#status{color:var(--muted);font-size:.9rem}input,select,textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:.55rem;padding:.6rem;font:inherit}textarea{min-height:5rem;resize:vertical}.small{min-height:3rem}.checks{display:grid;grid-template-columns:1fr;gap:.35rem .8rem}@media(min-width:720px){.checks{grid-template-columns:repeat(2,1fr)}.checks.three{grid-template-columns:repeat(3,1fr)}}.check{display:flex;gap:.5rem;font-weight:500}.check input{width:auto;margin-top:.35rem}.notice{border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));background:color-mix(in srgb,var(--accent) 10%,transparent);border-radius:.75rem;padding:.75rem}.output{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;min-height:18rem;font-size:.9rem}input[type=file]{display:none}footer{border-top:1px solid var(--line);color:var(--muted);padding:1.3rem 0}</style></head><body><header><div class="wrap"><h1>Style Shopper</h1><p class="lede">Build a reusable prompt for AI-assisted clothing shopping. The form auto-saves to this browser with localStorage. No data is sent anywhere.</p></div></header><div class="bar"><div class="wrap"><div><b>Autosave:</b> <span id="status">Ready</span></div><div class="buttons"><button id="copyBtn" class="primary" type="button">Generate & copy prompt</button><button id="previewBtn" type="button">Generate preview</button><button id="exportBtn" type="button">Export JSON</button><label for="importFile" class="fileBtn">Import JSON</label><input id="importFile" type="file" accept="application/json,.json"><button id="clearBtn" class="danger" type="button">Clear local data</button></div></div></div><main class="wrap"><form id="form"><section><h2>Current request</h2><div class="grid three"><label>Garment type<input name="garmentType" placeholder="straight-leg jeans, wool overcoat, white sneakers"></label><label>Use case<input name="useCase" placeholder="office, travel, wedding, daily casual"></label><label>Options to return<input name="quantity" type="number" min="1" max="30" placeholder="5"></label></div><label>Specific request notes<textarea name="requestNotes" placeholder="What should the agent optimize for?"></textarea></label></section><details open><summary>Body measurements</summary><p class="muted">Use one unit system consistently. Garment measurements from clothes that fit well are often most useful.</p><div class="grid four"><label>Unit<select name="unit"><option>inches</option><option>centimeters</option></select></label><label>Height<input name="height"></label><label>Weight<input name="weight"></label><label>Usual size(s)<input name="usualSizes" placeholder="M tops, 32x30 pants, 10.5 shoes"></label><label>Chest / bust<input name="chest"></label><label>Waist<input name="waist"></label><label>Hip / seat<input name="hip"></label><label>Shoulder width<input name="shoulder"></label><label>Sleeve length<input name="sleeve"></label><label>Neck<input name="neck"></label><label>Torso length<input name="torso"></label><label>Inseam<input name="inseam"></label><label>Thigh<input name="thigh"></label><label>Foot length<input name="footLength"></label><label>Foot width<input name="footWidth"></label><label>Arch / instep<input name="archInstep"></label></div></details><details open><summary>Favorite garment measurements</summary><div class="grid two"><label>Item 1: brand, size, garment type<textarea name="fav1" class="small" placeholder="Uniqlo U tee, size M"></textarea></label><label>Item 1 measurements and fit notes<textarea name="fav1Measurements" placeholder="pit-to-pit, length, shoulder, sleeve, rise, thigh, leg opening..."></textarea></label><label>Item 2: brand, size, garment type<textarea name="fav2" class="small"></textarea></label><label>Item 2 measurements and fit notes<textarea name="fav2Measurements"></textarea></label><label>Bad fit examples<textarea name="badFits" placeholder="Brands/sizes/items that failed and why"></textarea></label><label>Brand size history<textarea name="brandSizeHistory" placeholder="I wear 32 in X, M in Y, 44 EU in Z..."></textarea></label></div></details><details open><summary>Fit preferences</summary><div class="grid three"><label>Overall fit<select name="overallFit"><option></option><option>slim</option><option>regular</option><option>relaxed</option><option>oversized</option><option>tailored</option><option>boxy</option></select></label><label>Ease preference<select name="ease"><option></option><option>close-fitting</option><option>slight room</option><option>roomy</option><option>drapey</option></select></label><label>Length preference<input name="lengthPreference" placeholder="cropped, standard, longline"></label><label>Rise preference<input name="risePreference" placeholder="mid, high, very high"></label><label>Pant leg shape<input name="legShape" placeholder="straight, tapered, wide, bootcut"></label><label>Shoulder preference<input name="shoulderPreference" placeholder="natural, structured, dropped"></label></div><label>Mobility and comfort needs<textarea name="mobility" placeholder="sitting all day, cycling, lifting arms, walking commute..."></textarea></label></details><details open><summary>Style preferences</summary><div class="grid two"><label>Style keywords<textarea name="styleKeywords" placeholder="minimal, classic, workwear, preppy, outdoorsy, techwear..."></textarea></label><label>Preferred colors<textarea name="colors"></textarea></label><label>Patterns / graphics / logos<textarea name="patterns" placeholder="solid only, subtle stripe, no visible logos..."></textarea></label><label>Brands you like<textarea name="likedBrands"></textarea></label><label>Brands or aesthetics to avoid<textarea name="avoidBrands"></textarea></label><label>Wardrobe compatibility<textarea name="wardrobe" placeholder="Must work with black jeans, white sneakers, navy blazer..."></textarea></label></div></details><details open><summary>Materials, construction, and care</summary><div class="checks three"><label class="check"><input type="checkbox" name="mat_cotton">Cotton</label><label class="check"><input type="checkbox" name="mat_wool">Wool / merino</label><label class="check"><input type="checkbox" name="mat_linen">Linen</label><label class="check"><input type="checkbox" name="mat_denim">Denim</label><label class="check"><input type="checkbox" name="mat_leather">Leather</label><label class="check"><input type="checkbox" name="mat_nylon">Technical nylon</label><label class="check"><input type="checkbox" name="mat_noPoly">Avoid polyester-heavy fabrics</label><label class="check"><input type="checkbox" name="mat_noAcrylic">Avoid acrylic</label><label class="check"><input type="checkbox" name="mat_vegan">Vegan materials only</label><label class="check"><input type="checkbox" name="mat_machineWash">Machine washable only</label><label class="check"><input type="checkbox" name="mat_noDryClean">No dry-clean-only items</label><label class="check"><input type="checkbox" name="mat_wrinkle">Wrinkle-resistant preferred</label></div><label>Material notes<textarea name="materialNotes" placeholder="fabric weight, stretch, texture, breathability, warmth, durability..."></textarea></label></details><details><summary>Garment-specific details</summary><div class="grid two"><label>Tops / shirts / sweaters<textarea name="topsDetails" placeholder="neckline, body length, tucked/untucked, sleeve, opacity..."></textarea></label><label>Pants / jeans / chinos<textarea name="pantsDetails" placeholder="rise, thigh/seat fit, leg opening, stretch, hem preference..."></textarea></label><label>Jackets / coats / blazers<textarea name="outerwearDetails" placeholder="layering, temperature range, hood, water resistance, length..."></textarea></label><label>Dresses / skirts<textarea name="dressSkirtDetails" placeholder="length, silhouette, neckline, waist placement, lining, bra compatibility..."></textarea></label><label>Shoes<textarea name="shoeDetails" placeholder="US/EU/UK size, toe box, socks, orthotics, brand fit history..."></textarea></label><label>Accessories / other<textarea name="otherDetails"></textarea></label></div></details><details open><summary>Shopping constraints</summary><div class="grid three"><label>Country / region<input name="region" placeholder="US, Canada, UK, EU..."></label><label>Ideal budget<input name="budget"></label><label>Hard max price<input name="maxPrice"></label><label>Needed by<input name="neededBy" type="date"></label><label>Condition<select name="condition"><option></option><option>new only</option><option>used / resale okay</option><option>vintage okay</option><option>new, used, or vintage okay</option></select></label><label>Return policy<input name="returns" placeholder="free returns required, exchanges okay..."></label></div><div class="grid two"><label>Preferred retailers<textarea name="preferredRetailers"></textarea></label><label>Retailers to avoid<textarea name="avoidRetailers"></textarea></label></div><div class="checks"><label class="check"><input type="checkbox" name="inStockOnly">In-stock only</label><label class="check"><input type="checkbox" name="freeReturns">Free returns required</label><label class="check"><input type="checkbox" name="noFinalSale">Avoid final sale</label><label class="check"><input type="checkbox" name="saleOnly">Sale items only</label><label class="check"><input type="checkbox" name="sustainable">Prioritize sustainable / ethical options</label><label class="check"><input type="checkbox" name="measurementsRequired">Require detailed size charts or garment measurements</label></div></details><details open><summary>Avoid rules and ranking</summary><label>Hard avoids<textarea name="hardAvoids" placeholder="No low rise, no skinny fit, no visible logos, no cropped tops..."></textarea></label><label>Ranking priorities<textarea name="ranking" placeholder="Fit accuracy first, then material quality, then style match, then price..."></textarea></label><label>Output format instructions<textarea name="outputInstructions">Return the top options in a comparison table. Include product name, retailer, price, recommended size, why it matches, fit risks, material notes, return-policy notes, and link. Provide an uncertainty rating for each recommendation.</textarea></label></details><section><h2>Generated prompt preview</h2><p class="notice">Use “Generate & copy prompt” to copy the prompt to your clipboard. This preview is not sent anywhere.</p><textarea id="promptOutput" class="output" readonly></textarea></section></form></main><footer><div class="wrap">Browser-only app. Form data is saved in localStorage under <code>style-shopper-form-v1</code>.</div></footer><script>const KEY='style-shopper-form-v1',form=document.getElementById('form'),statusEl=document.getElementById('status'),output=document.getElementById('promptOutput');let timer;const labels={garmentType:'Garment type',useCase:'Use case',quantity:'Number of options to return',requestNotes:'Specific request notes',unit:'Unit system',height:'Height',weight:'Weight',usualSizes:'Usual sizes',chest:'Chest/bust',waist:'Waist',hip:'Hip/seat',shoulder:'Shoulder width',sleeve:'Sleeve length',neck:'Neck',torso:'Torso length',inseam:'Inseam',thigh:'Thigh',footLength:'Foot length',footWidth:'Foot width',archInstep:'Arch/instep',fav1:'Favorite item 1',fav1Measurements:'Favorite item 1 measurements and fit notes',fav2:'Favorite item 2',fav2Measurements:'Favorite item 2 measurements and fit notes',badFits:'Bad fit examples',brandSizeHistory:'Brand size history',overallFit:'Overall fit',ease:'Ease preference',lengthPreference:'Length preference',risePreference:'Rise preference',legShape:'Pant leg shape',shoulderPreference:'Shoulder preference',mobility:'Mobility and comfort needs',styleKeywords:'Style keywords',colors:'Preferred colors',patterns:'Patterns/graphics/logos',likedBrands:'Brands you like',avoidBrands:'Brands or aesthetics to avoid',wardrobe:'Wardrobe compatibility',materialNotes:'Material notes',topsDetails:'Tops/shirts/sweaters',pantsDetails:'Pants/jeans/chinos',outerwearDetails:'Jackets/coats/blazers',dressSkirtDetails:'Dresses/skirts',shoeDetails:'Shoes',otherDetails:'Accessories/other',region:'Country/region',budget:'Ideal budget',maxPrice:'Hard max price',neededBy:'Needed by',condition:'Condition',returns:'Return policy',preferredRetailers:'Preferred retailers',avoidRetailers:'Retailers to avoid',hardAvoids:'Hard avoids',ranking:'Ranking priorities',outputInstructions:'Output format'};function fields(){return [...form.elements].filter(e=>e.name)}function getData(){let d={};for(const e of fields())d[e.name]=e.type==='checkbox'?e.checked:e.value.trim();return d}function setData(d){for(const e of fields())if(e.name in d)e.type==='checkbox'?e.checked=!!d[e.name]:e.value=d[e.name]??''}function save(){localStorage.setItem(KEY,JSON.stringify(getData()));statusEl.textContent='Saved '+new Date().toLocaleTimeString();statusEl.style.color='var(--ok)'}function schedule(){statusEl.textContent='Saving...';statusEl.style.color='var(--muted)';clearTimeout(timer);timer=setTimeout(save,200)}function load(){try{let raw=localStorage.getItem(KEY);if(raw){setData(JSON.parse(raw));statusEl.textContent='Loaded saved data'}}catch(e){statusEl.textContent='Could not load saved data'}}function add(a,l,v){if(v)a.push(`- ${l}: ${v}`)}function val(d,k){return d[k]||''}function checked(d,pairs){return pairs.filter(([k])=>d[k]).map(x=>x[1]).join(', ')}function addGroup(a,title,d,keys){a.push('\n'+title+':');keys.forEach(k=>add(a,labels[k],val(d,k)))}function promptText(){const d=getData(),a=[];a.push(`Act as a clothing shopping agent. Find currently available ${val(d,'garmentType')||'[GARMENT TYPE]'} options that match my measurements, fit preferences, style preferences, and shopping constraints.`);add(a,'Use case',val(d,'useCase'));add(a,'Number of options to return',val(d,'quantity')||'5');add(a,'Specific request notes',val(d,'requestNotes'));addGroup(a,'My measurements',d,['unit','height','weight','usualSizes','chest','waist','hip','shoulder','sleeve','neck','torso','inseam','thigh','footLength','footWidth','archInstep']);addGroup(a,'Garment measurements and fit history',d,['fav1','fav1Measurements','fav2','fav2Measurements','badFits','brandSizeHistory']);addGroup(a,'Fit preferences',d,['overallFit','ease','lengthPreference','risePreference','legShape','shoulderPreference','mobility']);addGroup(a,'Style preferences',d,['styleKeywords','colors','patterns','likedBrands','avoidBrands','wardrobe']);a.push('\nMaterials, construction, and care:');add(a,'Material preferences and restrictions',checked(d,[['mat_cotton','cotton'],['mat_wool','wool/merino'],['mat_linen','linen'],['mat_denim','denim'],['mat_leather','leather'],['mat_nylon','technical nylon'],['mat_noPoly','avoid polyester-heavy fabrics'],['mat_noAcrylic','avoid acrylic'],['mat_vegan','vegan materials only'],['mat_machineWash','machine washable only'],['mat_noDryClean','no dry-clean-only items'],['mat_wrinkle','wrinkle-resistant preferred']]));add(a,'Material notes',val(d,'materialNotes'));addGroup(a,'Garment-specific details',d,['topsDetails','pantsDetails','outerwearDetails','dressSkirtDetails','shoeDetails','otherDetails']);addGroup(a,'Shopping constraints',d,['region','budget','maxPrice','neededBy','condition','returns','preferredRetailers','avoidRetailers']);add(a,'Additional constraints',checked(d,[['inStockOnly','in-stock only'],['freeReturns','free returns required'],['noFinalSale','avoid final sale'],['saleOnly','sale items only'],['sustainable','prioritize sustainable/ethical options'],['measurementsRequired','require detailed size charts or garment measurements']]));a.push('\nHard avoids and ranking:');add(a,'Hard avoids',val(d,'hardAvoids'));add(a,'Ranking priorities',val(d,'ranking')||'Rank by fit accuracy first, then material quality, then style match, then price.');a.push('\nSearch requirements:','- Only show items that are currently available to buy.','- Prefer listings with detailed size charts, garment measurements, or clear fit guidance.','- Do not rely only on generic size labels.','- Recommend a size for each option and explain the reasoning.','- Flag risks such as unclear measurements, final sale, poor return policy, synthetic-heavy fabric, questionable fit, or weak reviews.','- If measurements are missing, say what is missing and how that affects confidence.');add(a,'Output format',val(d,'outputInstructions'));return a.filter(Boolean).join('\n')}async function copyPrompt(){let p=promptText();output.value=p;try{await navigator.clipboard.writeText(p);statusEl.textContent='Prompt copied to clipboard';statusEl.style.color='var(--ok)'}catch(e){output.focus();output.select();document.execCommand('copy');statusEl.textContent='Prompt generated; copy fallback attempted'}}form.addEventListener('input',schedule);form.addEventListener('change',schedule);document.getElementById('previewBtn').onclick=()=>output.value=promptText();document.getElementById('copyBtn').onclick=copyPrompt;document.getElementById('exportBtn').onclick=()=>{let b=new Blob([JSON.stringify(getData(),null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='style-shopper-profile.json';a.click();URL.revokeObjectURL(a.href)};document.getElementById('importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{setData(JSON.parse(await f.text()));save();output.value=promptText()}catch{alert('Could not import JSON file.')}};document.getElementById('clearBtn').onclick=()=>{if(confirm('Clear all locally saved Style Shopper data in this browser?')){localStorage.removeItem(KEY);form.reset();output.value='';statusEl.textContent='Local data cleared';statusEl.style.color='var(--danger)'}};load();output.value=promptText();</script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Style Shopper</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <h1>Style Shopper</h1>
+        <p class="lede">
+          Build a reusable prompt for AI-assisted clothing shopping. The form
+          auto-saves to this browser with localStorage. No data is sent anywhere.
+        </p>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <div class="wrap toolbar-inner">
+        <div>
+          <strong>Autosave:</strong>
+          <span id="status" class="status">Ready</span>
+        </div>
+
+        <div class="button-row">
+          <button id="copy-button" class="primary" type="button">
+            Generate &amp; copy prompt
+          </button>
+          <button id="preview-button" type="button">Generate preview</button>
+          <button id="export-button" type="button">Export JSON</button>
+
+          <label for="import-file" class="file-button">Import JSON</label>
+          <input id="import-file" type="file" accept="application/json,.json" />
+
+          <button id="clear-button" class="danger" type="button">
+            Clear local data
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <main class="wrap">
+      <form id="shopping-form">
+        <section>
+          <h2>Current request</h2>
+
+          <div class="grid three">
+            <label>
+              Garment type
+              <input
+                name="garmentType"
+                placeholder="straight-leg jeans, wool overcoat, white sneakers"
+              />
+            </label>
+
+            <label>
+              Use case
+              <input name="useCase" placeholder="office, travel, wedding, daily casual" />
+            </label>
+
+            <label>
+              Options to return
+              <input name="quantity" type="number" min="1" max="30" placeholder="5" />
+            </label>
+          </div>
+
+          <label>
+            Specific request notes
+            <textarea
+              name="requestNotes"
+              placeholder="What should the agent optimize for?"
+            ></textarea>
+          </label>
+        </section>
+
+        <details open>
+          <summary>Body measurements</summary>
+          <p class="muted">
+            Use one unit system consistently. Garment measurements from clothes
+            that fit well are often most useful.
+          </p>
+
+          <div class="grid four">
+            <label>
+              Unit
+              <select name="unit">
+                <option>inches</option>
+                <option>centimeters</option>
+              </select>
+            </label>
+            <label>Height<input name="height" /></label>
+            <label>Weight<input name="weight" /></label>
+            <label>
+              Usual size(s)
+              <input name="usualSizes" placeholder="M tops, 32x30 pants, 10.5 shoes" />
+            </label>
+            <label>Chest / bust<input name="chest" /></label>
+            <label>Waist<input name="waist" /></label>
+            <label>Hip / seat<input name="hip" /></label>
+            <label>Shoulder width<input name="shoulder" /></label>
+            <label>Sleeve length<input name="sleeve" /></label>
+            <label>Neck<input name="neck" /></label>
+            <label>Torso length<input name="torso" /></label>
+            <label>Inseam<input name="inseam" /></label>
+            <label>Thigh<input name="thigh" /></label>
+            <label>Foot length<input name="footLength" /></label>
+            <label>Foot width<input name="footWidth" /></label>
+            <label>Arch / instep<input name="archInstep" /></label>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Favorite garment measurements</summary>
+
+          <div class="grid two">
+            <label>
+              Item 1: brand, size, garment type
+              <textarea
+                name="fav1"
+                class="small"
+                placeholder="Uniqlo U tee, size M"
+              ></textarea>
+            </label>
+
+            <label>
+              Item 1 measurements and fit notes
+              <textarea
+                name="fav1Measurements"
+                placeholder="pit-to-pit, length, shoulder, sleeve, rise, thigh, leg opening..."
+              ></textarea>
+            </label>
+
+            <label>
+              Item 2: brand, size, garment type
+              <textarea name="fav2" class="small"></textarea>
+            </label>
+
+            <label>
+              Item 2 measurements and fit notes
+              <textarea name="fav2Measurements"></textarea>
+            </label>
+
+            <label>
+              Bad fit examples
+              <textarea
+                name="badFits"
+                placeholder="Brands/sizes/items that failed and why"
+              ></textarea>
+            </label>
+
+            <label>
+              Brand size history
+              <textarea
+                name="brandSizeHistory"
+                placeholder="I wear 32 in X, M in Y, 44 EU in Z..."
+              ></textarea>
+            </label>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Fit preferences</summary>
+
+          <div class="grid three">
+            <label>
+              Overall fit
+              <select name="overallFit">
+                <option></option>
+                <option>slim</option>
+                <option>regular</option>
+                <option>relaxed</option>
+                <option>oversized</option>
+                <option>tailored</option>
+                <option>boxy</option>
+              </select>
+            </label>
+
+            <label>
+              Ease preference
+              <select name="ease">
+                <option></option>
+                <option>close-fitting</option>
+                <option>slight room</option>
+                <option>roomy</option>
+                <option>drapey</option>
+              </select>
+            </label>
+
+            <label>
+              Length preference
+              <input name="lengthPreference" placeholder="cropped, standard, longline" />
+            </label>
+
+            <label>
+              Rise preference
+              <input name="risePreference" placeholder="mid, high, very high" />
+            </label>
+
+            <label>
+              Pant leg shape
+              <input name="legShape" placeholder="straight, tapered, wide, bootcut" />
+            </label>
+
+            <label>
+              Shoulder preference
+              <input name="shoulderPreference" placeholder="natural, structured, dropped" />
+            </label>
+          </div>
+
+          <label>
+            Mobility and comfort needs
+            <textarea
+              name="mobility"
+              placeholder="sitting all day, cycling, lifting arms, walking commute..."
+            ></textarea>
+          </label>
+        </details>
+
+        <details open>
+          <summary>Style preferences</summary>
+
+          <div class="grid two">
+            <label>
+              Style keywords
+              <textarea
+                name="styleKeywords"
+                placeholder="minimal, classic, workwear, preppy, outdoorsy, techwear..."
+              ></textarea>
+            </label>
+
+            <label>Preferred colors<textarea name="colors"></textarea></label>
+
+            <label>
+              Patterns / graphics / logos
+              <textarea
+                name="patterns"
+                placeholder="solid only, subtle stripe, no visible logos..."
+              ></textarea>
+            </label>
+
+            <label>Brands you like<textarea name="likedBrands"></textarea></label>
+            <label>Brands or aesthetics to avoid<textarea name="avoidBrands"></textarea></label>
+
+            <label>
+              Wardrobe compatibility
+              <textarea
+                name="wardrobe"
+                placeholder="Must work with black jeans, white sneakers, navy blazer..."
+              ></textarea>
+            </label>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Materials, construction, and care</summary>
+
+          <div class="checkbox-grid three">
+            <label class="checkbox-label"><input type="checkbox" name="mat_cotton" />Cotton</label>
+            <label class="checkbox-label"><input type="checkbox" name="mat_wool" />Wool / merino</label>
+            <label class="checkbox-label"><input type="checkbox" name="mat_linen" />Linen</label>
+            <label class="checkbox-label"><input type="checkbox" name="mat_denim" />Denim</label>
+            <label class="checkbox-label"><input type="checkbox" name="mat_leather" />Leather</label>
+            <label class="checkbox-label"><input type="checkbox" name="mat_nylon" />Technical nylon</label>
+            <label class="checkbox-label"><input type="checkbox" name="mat_noPoly" />Avoid polyester-heavy fabrics</label>
+            <label class="checkbox-label"><input type="checkbox" name="mat_noAcrylic" />Avoid acrylic</label>
+            <label class="checkbox-label"><input type="checkbox" name="mat_vegan" />Vegan materials only</label>
+            <label class="checkbox-label"><input type="checkbox" name="mat_machineWash" />Machine washable only</label>
+            <label class="checkbox-label"><input type="checkbox" name="mat_noDryClean" />No dry-clean-only items</label>
+            <label class="checkbox-label"><input type="checkbox" name="mat_wrinkle" />Wrinkle-resistant preferred</label>
+          </div>
+
+          <label>
+            Material notes
+            <textarea
+              name="materialNotes"
+              placeholder="fabric weight, stretch, texture, breathability, warmth, durability..."
+            ></textarea>
+          </label>
+        </details>
+
+        <details>
+          <summary>Garment-specific details</summary>
+
+          <div class="grid two">
+            <label>
+              Tops / shirts / sweaters
+              <textarea
+                name="topsDetails"
+                placeholder="neckline, body length, tucked/untucked, sleeve, opacity..."
+              ></textarea>
+            </label>
+
+            <label>
+              Pants / jeans / chinos
+              <textarea
+                name="pantsDetails"
+                placeholder="rise, thigh/seat fit, leg opening, stretch, hem preference..."
+              ></textarea>
+            </label>
+
+            <label>
+              Jackets / coats / blazers
+              <textarea
+                name="outerwearDetails"
+                placeholder="layering, temperature range, hood, water resistance, length..."
+              ></textarea>
+            </label>
+
+            <label>
+              Dresses / skirts
+              <textarea
+                name="dressSkirtDetails"
+                placeholder="length, silhouette, neckline, waist placement, lining, bra compatibility..."
+              ></textarea>
+            </label>
+
+            <label>
+              Shoes
+              <textarea
+                name="shoeDetails"
+                placeholder="US/EU/UK size, toe box, socks, orthotics, brand fit history..."
+              ></textarea>
+            </label>
+
+            <label>Accessories / other<textarea name="otherDetails"></textarea></label>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Shopping constraints</summary>
+
+          <div class="grid three">
+            <label>
+              Country / region
+              <input name="region" placeholder="US, Canada, UK, EU..." />
+            </label>
+
+            <label>Ideal budget<input name="budget" /></label>
+            <label>Hard max price<input name="maxPrice" /></label>
+            <label>Needed by<input name="neededBy" type="date" /></label>
+
+            <label>
+              Condition
+              <select name="condition">
+                <option></option>
+                <option>new only</option>
+                <option>used / resale okay</option>
+                <option>vintage okay</option>
+                <option>new, used, or vintage okay</option>
+              </select>
+            </label>
+
+            <label>
+              Return policy
+              <input name="returns" placeholder="free returns required, exchanges okay..." />
+            </label>
+          </div>
+
+          <div class="grid two">
+            <label>Preferred retailers<textarea name="preferredRetailers"></textarea></label>
+            <label>Retailers to avoid<textarea name="avoidRetailers"></textarea></label>
+          </div>
+
+          <div class="checkbox-grid">
+            <label class="checkbox-label"><input type="checkbox" name="inStockOnly" />In-stock only</label>
+            <label class="checkbox-label"><input type="checkbox" name="freeReturns" />Free returns required</label>
+            <label class="checkbox-label"><input type="checkbox" name="noFinalSale" />Avoid final sale</label>
+            <label class="checkbox-label"><input type="checkbox" name="saleOnly" />Sale items only</label>
+            <label class="checkbox-label"><input type="checkbox" name="sustainable" />Prioritize sustainable / ethical options</label>
+            <label class="checkbox-label"><input type="checkbox" name="measurementsRequired" />Require detailed size charts or garment measurements</label>
+          </div>
+        </details>
+
+        <details open>
+          <summary>Avoid rules and ranking</summary>
+
+          <label>
+            Hard avoids
+            <textarea
+              name="hardAvoids"
+              placeholder="No low rise, no skinny fit, no visible logos, no cropped tops..."
+            ></textarea>
+          </label>
+
+          <label>
+            Ranking priorities
+            <textarea
+              name="ranking"
+              placeholder="Fit accuracy first, then material quality, then style match, then price..."
+            ></textarea>
+          </label>
+
+          <label>
+            Output format instructions
+            <textarea name="outputInstructions">Return the top options in a comparison table. Include product name, retailer, price, recommended size, why it matches, fit risks, material notes, return-policy notes, and link. Provide an uncertainty rating for each recommendation.</textarea>
+          </label>
+        </details>
+
+        <section>
+          <h2>Generated prompt preview</h2>
+          <p class="notice">
+            Use “Generate &amp; copy prompt” to copy the prompt to your clipboard.
+            This preview is not sent anywhere.
+          </p>
+          <textarea id="prompt-output" class="output" readonly></textarea>
+        </section>
+      </form>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        Browser-only app. Form data is saved in localStorage under
+        <code>style-shopper-form-v1</code>.
+      </div>
+    </footer>
+  </body>
+</html>
